@@ -24,6 +24,12 @@
       "@app/config/*": [
         "libs/config/src/*"
       ],
+      "@app/contracts": [
+        "libs/contracts/src"
+      ],
+      "@app/contracts/*": [
+        "libs/contracts/src/*"
+      ],
       "@app/core": [
         "libs/core/src"
       ],
@@ -35,6 +41,12 @@
       ],
       "@app/database/*": [
         "libs/database/src/*"
+      ],
+      "@app/message-patterns": [
+        "libs/message-patterns/src"
+      ],
+      "@app/message-patterns/*": [
+        "libs/message-patterns/src/*"
       ],
       "@app/rabbitmq": [
         "libs/rabbitmq/src"

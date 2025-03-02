@@ -3,6 +3,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { RabbitMqModule } from '@app/rabbitmq';
+import { USER_CLIENT } from '@app/contracts';
 
 @Module({
   imports: [
@@ -10,7 +11,7 @@ import { RabbitMqModule } from '@app/rabbitmq';
       isGlobal: true,
     }),
     RabbitMqModule.registerRmqRorRootAsync({
-      provide: 'USER_CLIENT',
+      provide: USER_CLIENT,
       inject: [ConfigService],
       imports: [ConfigModule],
       useFactory: (config: ConfigService) => {
@@ -19,20 +20,6 @@ import { RabbitMqModule } from '@app/rabbitmq';
         };
       },
     }),
-    //RabbitMqModule.registerRmq('USER_CLIENT', process.env.RABBITMQ_USER_QUEUE!),
-    // ClientsModule.register([
-    //   {
-    //     name: 'USER_CLIENT',
-    //     transport: Transport.RMQ,
-    //     options: {
-    //       urls: [`amqp://rabbitmq:rabbitmq@rabbitmq:5672`],
-    //       queue: 'cats_queue',
-    //       queueOptions: {
-    //         durable: false,
-    //       },
-    //     },
-    //   },
-    // ]),
   ],
   controllers: [AppController],
   providers: [AppService],
