@@ -1,23 +1,19 @@
 import { NestFactory } from '@nestjs/core';
 import { UserModule } from './user.module';
-import { Transport, MicroserviceOptions } from '@nestjs/microservices';
+import { ConfigService } from '@nestjs/config';
+import { RabbitMqService, RabbitMqServiceInterface } from '@app/rabbitmq';
 
 async function bootstrap() {
-  const app = await NestFactory.createMicroservice<MicroserviceOptions>(
-    UserModule,
-    {
-      transport: Transport.RMQ,
-      options: {
-        urls: ['amqp://rabbitmq:5672'],
-        queue: 'cats_queue',
-        queueOptions: {
-          durable: false,
-        },
-      },
-    },
-  );
-  await app.listen();
+  const app = await NestFactory.create(UserModule);
+
+  const configService = app.get(ConfigService);
+  const rabbitMqService: RabbitMqServiceInterface = app.get(RabbitMqService);
+
+  const queue = configService.get<string>('RABBITMQ_USER_QUEUE');
+
+  app.connectMicroservice(rabbitMqService.getRmqOptions(queue!));
+  await app.startAllMicroservices();
 }
 bootstrap()
-  .then(() => console.log('User microservice is running on 3001'))
-  .catch(() => console.log('Something went wrong in user microservice'));
+  .then(() => console.log('User microservice is running'))
+  .catch((e) => console.log(e));

@@ -1,9 +1,12 @@
-version: '3'
 services:
   rabbitmq:
     image: rabbitmq:3-management
     container_name: rabbitmq
     hostname: rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_DEFAULT_USER}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_DEFAULT_USER}
+      RABBITMQ_DEFAULT_VHOST: '/'
     volumes:
       - /var/lib/rabbitmq
     ports:
